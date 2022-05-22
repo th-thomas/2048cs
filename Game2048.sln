@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32421.90
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Game2048", "Game2048\Game2048.csproj", "{F46DA0E6-655C-4299-9EAC-876418630CD7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Game2048.Library", "Game2048.Library\Game2048.Library.csproj", "{27293880-E9B1-4291-B050-B8F8F56118BF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F46DA0E6-655C-4299-9EAC-876418630CD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F46DA0E6-655C-4299-9EAC-876418630CD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F46DA0E6-655C-4299-9EAC-876418630CD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F46DA0E6-655C-4299-9EAC-876418630CD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27293880-E9B1-4291-B050-B8F8F56118BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27293880-E9B1-4291-B050-B8F8F56118BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27293880-E9B1-4291-B050-B8F8F56118BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27293880-E9B1-4291-B050-B8F8F56118BF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {765C71C5-4CA2-4AAD-B057-20C7FEBE04CA}
+	EndGlobalSection
+EndGlobal
