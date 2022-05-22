@@ -26,11 +26,14 @@
 		<TrimmerRootAssembly Include="Microsoft.Xna.Framework.Content.ContentTypeReader" Visible="false" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="MonoGame.Extended" Version="3.8.0" />
-		<PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
-		<PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.0.1641" />
+	  <ProjectReference Include="..\Game2048.Library\Game2048.Library.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\Game2048.Library\Game2048.Library.csproj" />
+	  <Folder Include="Content\fonts\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.0.1641" />
+	  <PackageReference Include="MonoGame.Extended" Version="3.8.0" />
+	  <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
 	</ItemGroup>
 </Project>

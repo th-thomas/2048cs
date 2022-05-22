@@ -35,15 +35,14 @@ public class Grid
 
     public void SetCell(int row, int col, int value)
     {
-        var cell = _cellsArray[row, col];
         if (value == 0)
         {
-            cell = null;
+            _cellsArray[row, col] = null;
         }
         else
         {
-            cell = new Cell(value, this, _game);
-            _cellsMap.Add(cell, new Point(col, row));
+            _cellsArray[row, col] = new Cell(value, this, _game);
+            _cellsMap.Add(_cellsArray[row, col], new Point(col, row));
         }
     }
 

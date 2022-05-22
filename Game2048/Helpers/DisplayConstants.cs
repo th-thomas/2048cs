@@ -1,12 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Game2048;
+namespace Game2048.Helpers;
 
 public static class DisplayConstants
 {
     public record CellColor(Color BackgroundColor, Color ForegroundColor);
 
-    public const int PIXEL_PER_SQUARE = 120;
+    public const int RESOLUTION_X = 800;
+    public const int RESOLUTION_Y = 900;
+    public const int PIXELS_PER_CELL = 200;
+
     public static readonly Color COLOR_BG_MAIN = new(187, 173, 160);
     public static readonly Color COLOR_LIGHT_ALT = new(238, 228, 218);
     public static readonly Color COLOR_DARK = new(119, 110, 101);

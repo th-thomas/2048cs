@@ -1,6 +1,6 @@
-﻿namespace Game2048Library;
+﻿namespace Game2048.Library;
 
-public struct Point : IEquatable<Point>
+internal struct Point : IEquatable<Point>
 {
     public Point(int x, int y)
     {

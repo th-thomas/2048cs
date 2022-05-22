@@ -1,0 +1,22 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+
+namespace Game2048;
+
+internal class GameContent
+{
+    public Texture2D BackgroundTexture { get; }
+    public Texture2D PreviousMoveButtonTexture { get; }
+    public Texture2D NewGameButtonTexture { get; }
+    public SpriteFont Font { get; }
+
+    public GameContent(ContentManager contentManager, GraphicsDevice graphics)
+    {
+        BackgroundTexture = new Texture2D(graphics, 1, 1, false, SurfaceFormat.Color);
+        BackgroundTexture.SetData(new[] { Color.White });
+        PreviousMoveButtonTexture = contentManager.Load<Texture2D>($"bitmap{Path.DirectorySeparatorChar}back");
+        NewGameButtonTexture = contentManager.Load<Texture2D>($"bitmap{Path.DirectorySeparatorChar}refresh");
+        Font = contentManager.Load<SpriteFont>($"fonts{Path.DirectorySeparatorChar}FreeSansBold");
+    }
+}
