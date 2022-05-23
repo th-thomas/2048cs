@@ -4,7 +4,8 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.ViewportAdapters;
 using static Game2048.Helpers.DisplayConstants;
 using Game2048.Library;
-using Game2048.Drawables;
+using Game2048.Panels;
+using Game2048.Helpers;
 
 namespace Game2048;
 
@@ -12,18 +13,13 @@ public class Game2048 : Game
 {
     private ViewportAdapter _viewportAdapter;
     private SpriteBatch _spriteBatch;
+    private readonly GraphicsDeviceManager _graphics;
     private IGameCore _gameCore;
     private GameContent _gameContent;
 
-    private Texture2D _emptyTexture;
-    private SpriteFont _font;
-
-    private readonly GraphicsDeviceManager _graphics;
-
-    #region Drawables
-    private Button _previousMoveButton;
-    private Button _newGameButton;
-    private Title _title;
+    #region Drawables & Drawing resources
+    private InfoPanel _infoPanel;
+    private MainPanel _mainPanel;
     #endregion
 
     public Game2048()
@@ -50,13 +46,8 @@ public class Game2048 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         _gameContent = new GameContent(Content, GraphicsDevice);
-
-        _emptyTexture = _gameContent.BackgroundTexture;
-        _font = _gameContent.Font;
-
-        _previousMoveButton = new Button(_spriteBatch, _gameContent.PreviousMoveButtonTexture, new Rectangle(550, 0, 125, 100), null);
-        _newGameButton = new Button(_spriteBatch, _gameContent.NewGameButtonTexture, new Rectangle(675, 0, 125, 100), null);
-        _title = new Title(_spriteBatch, _gameContent, new Rectangle(0, 0, 200, 100));
+        _infoPanel = new InfoPanel(_spriteBatch, _gameContent, _gameCore, new Rectangle(0, 0, 800, 100));
+        _mainPanel = new MainPanel(_spriteBatch, _gameContent, _gameCore, new Rectangle(0, 100, 800, 800));
     }
 
     protected override void Update(GameTime gameTime)
@@ -84,23 +75,12 @@ public class Game2048 : Game
 
         _spriteBatch.Begin(transformMatrix: _viewportAdapter.GetScaleMatrix());
 
-        FillViewportWithBackgroundColor();
-        DrawTopPanel();
+        _spriteBatch.DrawColoredRectangle(_viewportAdapter.BoundingRectangle, COLOR_BG_MAIN, _gameContent.EmptyTexture);
+        _infoPanel.Draw();
+        _mainPanel.Draw();
 
         _spriteBatch.End();
 
         base.Draw(gameTime);
-    }
-
-    private void FillViewportWithBackgroundColor()
-    {
-        _spriteBatch.Draw(_emptyTexture, _viewportAdapter.BoundingRectangle, COLOR_BG_MAIN);
-    }
-
-    private void DrawTopPanel()
-    {
-        _title.Draw();
-        _previousMoveButton.Draw();
-        _newGameButton.Draw();
     }
 }

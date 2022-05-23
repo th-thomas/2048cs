@@ -8,7 +8,6 @@ public static class DisplayConstants
 
     public const int RESOLUTION_X = 800;
     public const int RESOLUTION_Y = 900;
-    public const int PIXELS_PER_CELL = 200;
 
     public static readonly Color COLOR_BG_MAIN = new(187, 173, 160);
     public static readonly Color COLOR_LIGHT_ALT = new(238, 228, 218);

@@ -18,8 +18,7 @@ public class SaveService
 
     public SaveService(GameCore game, IConfiguration configuration)
     {
-        if (game is null) throw new ArgumentNullException(nameof(game));
-        _config = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        _config = configuration;
         _gameSize = game.Size;
     }
 

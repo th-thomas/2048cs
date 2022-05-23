@@ -10,7 +10,7 @@ public class Cell
     {
         Value = valeur;
         _grid = grid;
-        _scoreManager = game ?? throw new ArgumentNullException(nameof(game));
+        _scoreManager = game;
         _hasFusionned = false;
     }
 

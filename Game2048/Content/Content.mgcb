@@ -37,10 +37,24 @@
 /processorParam:TextureFormat=Color
 /build:bitmaps/refresh.png
 
-#begin fonts/FreeSansBold.spritefont
+#begin fonts/FreeSansBoldBig.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:fonts/FreeSansBold.spritefont
+/build:fonts/FreeSansBoldBig.spritefont
+
+#begin fonts/FreeSansBoldMedium.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/FreeSansBoldMedium.spritefont
+
+#begin fonts/FreeSansBoldSmall.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/FreeSansBoldSmall.spritefont
 

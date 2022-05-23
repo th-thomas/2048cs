@@ -13,7 +13,7 @@ public class Grid
     public Grid(int size, IScoreManager game)
     {
         _size = size;
-        _game = game ?? throw new ArgumentNullException(nameof(game));
+        _game = game;
         _cellsArray = new Cell[size, size];
         _cellsMap = new();
         _rand = new Random();
