@@ -3,6 +3,7 @@ using Game2048.Helpers;
 using Game2048.Library;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace Game2048.Panels
 {
@@ -16,7 +17,7 @@ namespace Game2048.Panels
         private readonly SpriteFont _titleFont;
         private readonly Rectangle _titleBounds;
 
-        internal InfoPanel(SpriteBatch spriteBatch, GameContent gameContent, IGameCore gameCore, Rectangle bounds)
+        internal InfoPanel(ViewportAdapter viewportAdapter, SpriteBatch spriteBatch, GameContent gameContent, IGameCore gameCore, Rectangle bounds)
         {
             _spriteBatch = spriteBatch;
 
@@ -33,10 +34,10 @@ namespace Game2048.Panels
 
             var prevMoveX = highScoreX + scoreWidth;
             var buttonWidth = bounds.Width * 5 / 32;
-            _previousMoveButton = new Button(_spriteBatch, gameContent.PreviousMoveButtonTexture, new Rectangle(prevMoveX, bounds.Y, buttonWidth, bounds.Height), null);
+            _previousMoveButton = new Button(viewportAdapter, _spriteBatch, gameContent.PreviousMoveButtonTexture, new Rectangle(prevMoveX, bounds.Y, buttonWidth, bounds.Height), null);
 
             var newGameX = prevMoveX + buttonWidth;
-            _newGameButton = new Button(_spriteBatch, gameContent.NewGameButtonTexture, new Rectangle(newGameX, bounds.Y, buttonWidth, bounds.Height), null);
+            _newGameButton = new Button(viewportAdapter, _spriteBatch, gameContent.NewGameButtonTexture, new Rectangle(newGameX, bounds.Y, buttonWidth, bounds.Height), null);
         }
 
         internal void Draw()
@@ -46,6 +47,12 @@ namespace Game2048.Panels
             _highScorePanel.Draw();
             _previousMoveButton.Draw();
             _newGameButton.Draw();
+        }
+
+        internal void Update()
+        {
+            _previousMoveButton.Update();
+            _newGameButton.Update();
         }
     }
 }

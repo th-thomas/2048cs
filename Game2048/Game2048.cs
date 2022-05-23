@@ -9,20 +9,22 @@ using Game2048.Helpers;
 
 namespace Game2048;
 
-public class Game2048 : Game
+internal class Game2048 : Game
 {
+    #region Fields
     private ViewportAdapter _viewportAdapter;
     private SpriteBatch _spriteBatch;
     private readonly GraphicsDeviceManager _graphics;
     private IGameCore _gameCore;
     private GameContent _gameContent;
+    #endregion
 
-    #region Drawables & Drawing resources
+    #region Drawables
     private InfoPanel _infoPanel;
     private MainPanel _mainPanel;
     #endregion
 
-    public Game2048()
+    internal Game2048()
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
@@ -46,8 +48,8 @@ public class Game2048 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         _gameContent = new GameContent(Content, GraphicsDevice);
-        _infoPanel = new InfoPanel(_spriteBatch, _gameContent, _gameCore, new Rectangle(0, 0, 800, 100));
-        _mainPanel = new MainPanel(_spriteBatch, _gameContent, _gameCore, new Rectangle(0, 100, 800, 800));
+        _infoPanel = new InfoPanel(_viewportAdapter, _spriteBatch, _gameContent, _gameCore, new Rectangle(0, 0, RESOLUTION_X, 100));
+        _mainPanel = new MainPanel(_viewportAdapter, _spriteBatch, _gameContent, _gameCore, new Rectangle(0, 100, RESOLUTION_X, RESOLUTION_X));
     }
 
     protected override void Update(GameTime gameTime)
@@ -65,6 +67,8 @@ public class Game2048 : Game
             _gameCore.Action(Direction.Up);
         else if (gamepadState.DPad.Down == ButtonState.Pressed || keyboardState.IsKeyDown(Keys.Down))
             _gameCore.Action(Direction.Down);
+        
+        _infoPanel.Update();
 
         base.Update(gameTime);
     }

@@ -25,7 +25,7 @@ public class GameCore : IScoreManager, IGameCore
 
     public int Score { get; private set; }
 
-    public int HighScore { get => 0; } // _saveService.FetchHighScore(); }
+    public int HighScore { get; } // _saveService.FetchHighScore(); }
     #endregion
 
     #region Publics methods

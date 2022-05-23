@@ -2,6 +2,7 @@
 using Game2048.Library;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace Game2048.Panels;
 
@@ -15,7 +16,7 @@ internal class MainPanel
     private readonly Texture2D _emptyTexture;
     private readonly SpriteFont _cellFont;
 
-    internal MainPanel(SpriteBatch spriteBatch, GameContent gameContent, IGameCore gameCore, Rectangle bounds)
+    internal MainPanel(ViewportAdapter viewportAdapter, SpriteBatch spriteBatch, GameContent gameContent, IGameCore gameCore, Rectangle bounds)
     {
         _spriteBatch = spriteBatch;
         _gameCore = gameCore;
