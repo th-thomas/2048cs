@@ -19,6 +19,11 @@ public class Cell
     #endregion
 
     #region Public methods
+    public override string ToString()
+    {
+        return Value.ToString();
+    }
+
     public bool CanMove(Direction direction)
     {
         if (_grid.NeighborCellExists(direction, this))

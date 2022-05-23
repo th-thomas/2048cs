@@ -16,7 +16,7 @@ public static class DisplayConstants
     public static readonly float FONT_SIZE_BIG = 46.0f;
     public static readonly float FONT_SIZE_MEDIUM = 23.0f;
 
-    public static readonly Dictionary<int, CellColor> CELL_COLOR = new()
+    public static readonly Dictionary<int, CellColor> CELL_COLORS = new()
     {
         { 0, new CellColor(new Color(205, 193, 180), COLOR_DARK) },
         { 2, new CellColor(COLOR_LIGHT_ALT, COLOR_DARK) },

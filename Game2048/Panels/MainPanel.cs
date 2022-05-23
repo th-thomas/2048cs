@@ -7,42 +7,46 @@ namespace Game2048.Panels;
 
 internal class MainPanel
 {
+    private const int CELL_PADDING = 10;
+
     private readonly SpriteBatch _spriteBatch;
     private readonly IGameCore _gameCore;
+    private readonly Rectangle _bounds;
     private readonly Texture2D _emptyTexture;
+    private readonly SpriteFont _cellFont;
 
     internal MainPanel(SpriteBatch spriteBatch, GameContent gameContent, IGameCore gameCore, Rectangle bounds)
     {
         _spriteBatch = spriteBatch;
-        _emptyTexture = gameContent.EmptyTexture;
         _gameCore = gameCore;
+        _bounds = bounds;
+        _emptyTexture = gameContent.EmptyTexture;
+        _cellFont = gameContent.FontBig;
     }
 
     internal void Draw()
     {
         var cellRectangle = new Rectangle();
-        int cellX = 0;
-        int cellY = 100;
+        cellRectangle.Width = cellRectangle.Height = (_bounds.Width / _gameCore.Size) - (2 * CELL_PADDING);
+
+        var cellX = _bounds.X;
+        var cellY = _bounds.Y;
+        Color cellBg;
+        Color cellFg;
 
         for (var row = 0; row < _gameCore.Size; row++)
         {
             for (var col = 0; col < _gameCore.Size; col++)
             {
-                cellRectangle.X = cellX;
-                cellRectangle.Y = cellY;
-                cellRectangle.Width = 200;
-                cellRectangle.Height = 200;
+                cellRectangle.X = cellX + CELL_PADDING;
+                cellRectangle.Y = cellY + CELL_PADDING;
 
                 var cell = _gameCore.GetCell(row, col);
-                if (cell is null)
-                {
-                    _spriteBatch.DrawColoredRectangle(cellRectangle, Color.AliceBlue, _emptyTexture);
-                }
-                else
-                {
-                    _spriteBatch.DrawColoredRectangle(cellRectangle, Color.AliceBlue, _emptyTexture);
-                }
-                cellX += 200;
+                (cellBg, cellFg) = DisplayConstants.CELL_COLORS[cell is null ? 0 : cell.Value];
+                _spriteBatch.DrawColoredRectangle(cellRectangle, cellBg, _emptyTexture);
+                _spriteBatch.DrawString(_cellFont, cell is null ? string.Empty : cell.Value.ToString(), cellFg, cellRectangle, Extensions.AlignX.CenterAligned, Extensions.AlignY.CenterAligned);
+                
+                cellX += _bounds.Width / _gameCore.Size;
                 if (col == _gameCore.Size - 1)
                 {
                     cellX = 0;
