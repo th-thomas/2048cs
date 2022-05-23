@@ -26,8 +26,9 @@ internal class MainPanel
 
     internal void Draw()
     {
+        var totalRectangleSize = _bounds.Width / _gameCore.Size;
         var cellRectangle = new Rectangle();
-        cellRectangle.Width = cellRectangle.Height = (_bounds.Width / _gameCore.Size) - (2 * CELL_PADDING);
+        cellRectangle.Width = cellRectangle.Height = totalRectangleSize - (2 * CELL_PADDING);
 
         var cellX = _bounds.X;
         var cellY = _bounds.Y;
@@ -46,13 +47,13 @@ internal class MainPanel
                 _spriteBatch.DrawColoredRectangle(cellRectangle, cellBg, _emptyTexture);
                 _spriteBatch.DrawString(_cellFont, cell is null ? string.Empty : cell.Value.ToString(), cellFg, cellRectangle, Extensions.AlignX.CenterAligned, Extensions.AlignY.CenterAligned);
                 
-                cellX += _bounds.Width / _gameCore.Size;
+                cellX += totalRectangleSize;
                 if (col == _gameCore.Size - 1)
                 {
                     cellX = 0;
                 }
             }
-            cellY += 200;
+            cellY += totalRectangleSize;
         }
     }
 }
