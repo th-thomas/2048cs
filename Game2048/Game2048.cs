@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.ViewportAdapters;
 using MonoGame.Extended.Input;
+using MonoGame.Extended.ViewportAdapters;
 using static Game2048.Helpers.DisplayConstants;
 using Game2048.Library;
 using Game2048.Panels;
@@ -16,7 +16,7 @@ internal class Game2048 : Game, IObserver<IGameCore>
     private ViewportAdapter _viewportAdapter;
     private SpriteBatch _spriteBatch;
     private readonly GraphicsDeviceManager _graphics;
-    private IGameCore _gameCore;
+    private readonly IGameCore _gameCore;
     private GameContent _gameContent;
     private readonly ICell?[,] _cells;
     #endregion
@@ -59,17 +59,17 @@ internal class Game2048 : Game, IObserver<IGameCore>
     protected override void Update(GameTime gameTime)
     {
         var gamepadState = GamePad.GetState(PlayerIndex.One);
-        var keyboardState = Keyboard.GetState();
+        var keyboardState = KeyboardExtended.GetState();
 
         if (gamepadState.Buttons.Back == ButtonState.Pressed || keyboardState.IsKeyDown(Keys.Escape))
             Exit();
-        else if (gamepadState.DPad.Left == ButtonState.Pressed || keyboardState.IsKeyDown(Keys.Left))
+        else if (gamepadState.DPad.Left == ButtonState.Pressed || (keyboardState.IsKeyDown(Keys.Left) && keyboardState.WasKeyJustUp(Keys.Left)))
             _gameCore.Action(Direction.Left);
-        else if (gamepadState.DPad.Right == ButtonState.Pressed || keyboardState.IsKeyDown(Keys.Right))
+        else if (gamepadState.DPad.Right == ButtonState.Pressed || (keyboardState.IsKeyDown(Keys.Right) && keyboardState.WasKeyJustUp(Keys.Right)))
             _gameCore.Action(Direction.Right);
-        else if (gamepadState.DPad.Up == ButtonState.Pressed || keyboardState.IsKeyDown(Keys.Up))
+        else if (gamepadState.DPad.Up == ButtonState.Pressed || (keyboardState.IsKeyDown(Keys.Up) && keyboardState.WasKeyJustUp(Keys.Up)))
             _gameCore.Action(Direction.Up);
-        else if (gamepadState.DPad.Down == ButtonState.Pressed || keyboardState.IsKeyDown(Keys.Down))
+        else if (gamepadState.DPad.Down == ButtonState.Pressed || (keyboardState.IsKeyDown(Keys.Down) && keyboardState.WasKeyJustUp(Keys.Down)))
             _gameCore.Action(Direction.Down);
         
         _infoPanel.Update();
