@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.ViewportAdapters;
+using MonoGame.Extended.Input;
 using static Game2048.Helpers.DisplayConstants;
 using Game2048.Library;
 using Game2048.Panels;
@@ -9,7 +10,7 @@ using Game2048.Helpers;
 
 namespace Game2048;
 
-internal class Game2048 : Game
+internal class Game2048 : Game, IObserver<IGameCore>
 {
     #region Fields
     private ViewportAdapter _viewportAdapter;
@@ -17,6 +18,7 @@ internal class Game2048 : Game
     private readonly GraphicsDeviceManager _graphics;
     private IGameCore _gameCore;
     private GameContent _gameContent;
+    private readonly ICell?[,] _cells;
     #endregion
 
     #region Drawables
@@ -24,17 +26,18 @@ internal class Game2048 : Game
     private MainPanel _mainPanel;
     #endregion
 
-    internal Game2048()
+    internal Game2048(IGameCore gameCore)
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
         Window.AllowUserResizing = true;
+        _gameCore = gameCore;
+        _cells = new ICell[_gameCore.Size, _gameCore.Size];
     }
 
     protected override void Initialize()
     {
-        _gameCore = new GameCore(4);
         _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, RESOLUTION_X, RESOLUTION_Y);
 
         _graphics.PreferredBackBufferWidth = RESOLUTION_X;
@@ -48,8 +51,9 @@ internal class Game2048 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         _gameContent = new GameContent(Content, GraphicsDevice);
-        _infoPanel = new InfoPanel(_viewportAdapter, _spriteBatch, _gameContent, _gameCore, new Rectangle(0, 0, RESOLUTION_X, 100));
-        _mainPanel = new MainPanel(_viewportAdapter, _spriteBatch, _gameContent, _gameCore, new Rectangle(0, 100, RESOLUTION_X, RESOLUTION_X));
+        _infoPanel = new InfoPanel(_viewportAdapter, _spriteBatch, _gameContent, new Rectangle(0, 0, RESOLUTION_X, 100));
+        _mainPanel = new MainPanel(_spriteBatch, _gameContent, new Rectangle(0, 100, RESOLUTION_X, RESOLUTION_X));
+        _gameCore.Init(true);
     }
 
     protected override void Update(GameTime gameTime)
@@ -87,4 +91,42 @@ internal class Game2048 : Game
 
         base.Draw(gameTime);
     }
+
+    #region Observer implementation
+    private IDisposable _cancellation;
+
+    public void OnNext(IGameCore gameCore)
+    {
+        _infoPanel.Score = gameCore.Score;
+        _infoPanel.HighScore = gameCore.HighScore;
+        for (var row = 0; row < gameCore.Size; row++)
+        {
+            for (var col = 0; col < gameCore.Size; col++)
+            {
+                _cells[row, col] = gameCore.GetCell(row, col);
+            }
+        }
+        _mainPanel.Cells = _cells;
+    }
+
+    public void OnCompleted()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnError(Exception error)
+    {
+        throw new NotImplementedException();
+    }
+
+    public virtual void Subscribe(IGameCore provider)
+    {
+        _cancellation = provider.Subscribe(this);
+    }
+
+    public virtual void Unsubscribe()
+    {
+        _cancellation.Dispose();
+    }
+    #endregion
 }

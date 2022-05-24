@@ -2,7 +2,7 @@
 
 namespace Game2048.Library;
 
-public class Grid
+internal class Grid
 {
     private readonly int _size;
     private readonly IScoreManager _game;
@@ -10,7 +10,7 @@ public class Grid
     private readonly Dictionary<Cell, Point> _cellsMap;
     private readonly Random _rand;
 
-    public Grid(int size, IScoreManager game)
+    internal Grid(int size, IScoreManager game)
     {
         _size = size;
         _game = game;
@@ -20,7 +20,7 @@ public class Grid
     }
 
     #region Properties
-    public bool IsScoreGoalReached
+    internal bool IsScoreGoalReached
     {
         // TODO: refactor
         get => _cellsMap.Keys.Any(cell => cell.Value == 2048);
@@ -28,12 +28,12 @@ public class Grid
     #endregion
 
     #region Public methods
-    public Cell? GetCell(int row, int col)
+    internal Cell? GetCell(int row, int col)
     {
         return _cellsArray[row, col];
     }
 
-    public void SetCell(int row, int col, int value)
+    internal void SetCell(int row, int col, int value)
     {
         if (value == 0)
         {
@@ -46,13 +46,13 @@ public class Grid
         }
     }
 
-    public void ClearCells()
+    internal void ClearCells()
     {
         ((IList)_cellsArray).Clear();
         _cellsMap.Clear();
     }
 
-    public bool NeighborCellExists(Direction direction, Cell c)
+    internal bool NeighborCellExists(Direction direction, Cell c)
     {
         Point coord = _cellsMap[c];
         return direction switch
@@ -65,7 +65,7 @@ public class Grid
         };
     }
 
-    public Cell? GetNeighborCell(Direction direction, Cell c)
+    internal Cell? GetNeighborCell(Direction direction, Cell c)
     {
         Point coord = _cellsMap[c];
         return direction switch
@@ -78,7 +78,7 @@ public class Grid
         };
     }
 
-    public bool CanAnyCellMove()
+    internal bool CanAnyCellMove()
     {
         foreach (var dir in (Direction[])Enum.GetValues(typeof(Direction)))
         {
@@ -90,12 +90,12 @@ public class Grid
         return false;
     }
 
-    public bool CanAnyCellMove(Direction direction)
+    internal bool CanAnyCellMove(Direction direction)
     {
         return _cellsMap.Keys.Any(cell => cell.CanMove(direction));
     }
 
-    public void MoveEachCell(Direction direction)
+    internal void MoveEachCell(Direction direction)
     {
         if (direction == Direction.Down || direction == Direction.Right)
         {
@@ -127,7 +127,7 @@ public class Grid
         }
     }
 
-    public void MoveCell(Direction direction, Cell c)
+    internal void MoveCell(Direction direction, Cell c)
     {
         Point coord = _cellsMap[c];
 
@@ -153,7 +153,7 @@ public class Grid
         _cellsMap[c] = newCoord;
     }
 
-    public void SpawnInitCells()
+    internal void SpawnInitCells()
     {
         var cell1Value = RandCellValue();
         var cell1Pos = RandCellPosition();
@@ -171,7 +171,7 @@ public class Grid
         _cellsMap.Add(_cellsArray[cell2Pos.Y, cell2Pos.X], cell2Pos);
     }
 
-    public void SpawnNewCell()
+    internal void SpawnNewCell()
     {
         Point spawnPoint;
         do

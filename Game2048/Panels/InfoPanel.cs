@@ -9,6 +9,7 @@ namespace Game2048.Panels
 {
     internal class InfoPanel
     {
+        #region Fields
         private readonly SpriteBatch _spriteBatch;
         private readonly ScorePanel _currentScorePanel;
         private readonly ScorePanel _highScorePanel;
@@ -16,8 +17,14 @@ namespace Game2048.Panels
         private readonly Button _newGameButton;
         private readonly SpriteFont _titleFont;
         private readonly Rectangle _titleBounds;
+        #endregion
 
-        internal InfoPanel(ViewportAdapter viewportAdapter, SpriteBatch spriteBatch, GameContent gameContent, IGameCore gameCore, Rectangle bounds)
+        #region Properties
+        internal int Score { get; set; }
+        internal int HighScore { get; set; }
+        #endregion
+
+        internal InfoPanel(ViewportAdapter viewportAdapter, SpriteBatch spriteBatch, GameContent gameContent, Rectangle bounds)
         {
             _spriteBatch = spriteBatch;
 

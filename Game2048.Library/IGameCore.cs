@@ -1,9 +1,11 @@
 ﻿namespace Game2048.Library;
 
-public interface IGameCore
+public interface IGameCore : IObservable<IGameCore>
 {
-    
-    void Action(Direction direction);
     int Size { get; }
-    Cell? GetCell(int row, int col);
+    int Score { get; }
+    int HighScore { get; }
+    ICell? GetCell(int row, int col);
+    void Action(Direction direction);
+    void Init(bool clear);
 }

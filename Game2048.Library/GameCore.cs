@@ -2,21 +2,11 @@
 
 public class GameCore : IScoreManager, IGameCore
 {
+    #region Fields
+    private List<IObserver<IGameCore>> _observers;
     private readonly Grid _grid;
     // private readonly SaveService _saveService;
-
-    public GameCore(int size) //, SaveService saveService)
-    {
-        Size = size;
-        _grid = new Grid(size, this);
-        GameState = GameState.Ongoing;
-        //_saveService = saveService ?? throw new ArgumentNullException(nameof(saveService));
-
-        //if (_saveService.FetchSnapshot(Save.PreviousGame).Grid is null)
-        //    Init(false);
-        //else
-        //    LoadSavedGame(Save.PreviousGame);
-    }
+    #endregion
 
     #region Properties
     public int Size { get; }
@@ -28,19 +18,24 @@ public class GameCore : IScoreManager, IGameCore
     public int HighScore { get; } // _saveService.FetchHighScore(); }
     #endregion
 
+    public GameCore(int size) //, SaveService saveService)
+    {
+        _observers = new List<IObserver<IGameCore>>();
+        Size = size;
+        _grid = new Grid(size, this);
+        //_saveService = saveService ?? throw new ArgumentNullException(nameof(saveService));
+
+        //if (_saveService.FetchSnapshot(Save.PreviousGame).Grid is null)
+        //    Init(false);
+        //else
+        //    LoadSavedGame(Save.PreviousGame);
+    }
+
     #region Publics methods
-    public void AddToScore(int points)
-    {
-        Score += points;
-    }
-
-    public Cell? GetCell(int row, int col)
-    {
-        return _grid.GetCell(row, col);
-    }
-
     public void Init(bool clear)
     {
+        GameState = GameState.Ongoing;
+
         if (clear)
         {
             _grid.ClearCells();
@@ -48,9 +43,17 @@ public class GameCore : IScoreManager, IGameCore
         }
 
         _grid.SpawnInitCells();
-        // TODO
-        // setChanged();
-        // notifyObservers();
+        _observers.ForEach(x => x.OnNext(this));
+    }
+
+    public void AddToScore(int points)
+    {
+        Score += points;
+    }
+
+    public ICell? GetCell(int row, int col)
+    {
+        return _grid.GetCell(row, col);
     }
 
     public void Action(Direction direction)
@@ -64,9 +67,16 @@ public class GameCore : IScoreManager, IGameCore
         _grid.SpawnNewCell();
         GameState = _grid.IsScoreGoalReached ? GameState.Win : _grid.CanAnyCellMove() ? GameState.Ongoing : GameState.Loss;
         //SaveSnapshot(Save.PreviousGame);
-        // TODO
-        // setChanged();
-        // notifyObservers();
+        _observers.ForEach(x => x.OnNext(this));
+    }
+
+    public IDisposable Subscribe(IObserver<IGameCore> observer)
+    {
+        if (!_observers.Contains(observer))
+        {
+            _observers.Add(observer);
+        }
+        return new Unsubscriber(_observers, observer);
     }
 
     //public void LoadSavedGame(Save saveType)

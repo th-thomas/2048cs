@@ -1,6 +1,6 @@
 ﻿namespace Game2048.Library;
 
-public class Cell
+internal class Cell : ICell
 {
     private readonly Grid _grid;
     private readonly IScoreManager _scoreManager;
@@ -19,11 +19,6 @@ public class Cell
     #endregion
 
     #region Public methods
-    public override string ToString()
-    {
-        return Value.ToString();
-    }
-
     public bool CanMove(Direction direction)
     {
         if (_grid.NeighborCellExists(direction, this))
