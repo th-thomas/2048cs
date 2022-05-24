@@ -32,27 +32,38 @@ internal class Game2048 : Game, IObserver<IGameCore>
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
         Window.AllowUserResizing = true;
+        Window.ClientSizeChanged += Window_ClientSizeChanged;
         _gameCore = gameCore;
         _cells = new ICell[_gameCore.Size, _gameCore.Size];
     }
 
     protected override void Initialize()
     {
-        _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, RESOLUTION_X, RESOLUTION_Y);
-
-        _graphics.PreferredBackBufferWidth = RESOLUTION_X;
-        _graphics.PreferredBackBufferHeight = RESOLUTION_Y;
+        _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, RESOLUTION.X, RESOLUTION.Y);
+        _graphics.PreferredBackBufferWidth = RESOLUTION.X;
+        _graphics.PreferredBackBufferHeight = RESOLUTION.Y;
         _graphics.ApplyChanges();
 
         base.Initialize();
+    }
+
+    private void Window_ClientSizeChanged(object? sender, EventArgs e)
+    {
+        (_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight) = Window.ClientBounds switch
+        {
+            { Width: var width, Height: var height } when width < RESOLUTION_MIN.X || height < RESOLUTION_MIN.Y => (RESOLUTION_MIN.X, RESOLUTION_MIN.Y),
+            _ => (Window.ClientBounds.Width, Window.ClientBounds.Height)
+        };
+
+        _graphics.ApplyChanges();
     }
 
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         _gameContent = new GameContent(Content, GraphicsDevice);
-        _infoPanel = new InfoPanel(_viewportAdapter, _spriteBatch, _gameContent, new Rectangle(0, 0, RESOLUTION_X, 100));
-        _mainPanel = new MainPanel(_spriteBatch, _gameContent, new Rectangle(0, 100, RESOLUTION_X, RESOLUTION_X));
+        _infoPanel = new InfoPanel(_viewportAdapter, _spriteBatch, _gameContent, new Rectangle(0, 0, RESOLUTION.X, 100));
+        _mainPanel = new MainPanel(_spriteBatch, _gameContent, new Rectangle(0, 100, RESOLUTION.X, RESOLUTION.Y));
         _gameCore.Init(true);
     }
 

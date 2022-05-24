@@ -6,8 +6,8 @@ public static class DisplayConstants
 {
     public record CellColor(Color BackgroundColor, Color ForegroundColor);
 
-    public const int RESOLUTION_X = 800;
-    public const int RESOLUTION_Y = 900;
+    public static readonly (int X, int Y) RESOLUTION = (800, 900);
+    public static readonly (int X, int Y) RESOLUTION_MIN = (400, 450);
 
     public static readonly Color COLOR_BG_MAIN = new(187, 173, 160);
     public static readonly Color COLOR_LIGHT_ALT = new(238, 228, 218);
