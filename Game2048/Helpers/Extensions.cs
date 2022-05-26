@@ -10,8 +10,8 @@ internal static class Extensions
         spriteBatch.Draw(emptyTexture, rectangle, color);
     }
 
-    public enum AlignX { LeftAligned, CenterAligned, RightAligned }
-    public enum AlignY { TopAligned, CenterAligned, BottomAligned }
+    internal enum AlignX { LeftAligned, CenterAligned, RightAligned }
+    internal enum AlignY { TopAligned, CenterAligned, BottomAligned }
 
     internal static void DrawString(this SpriteBatch spriteBatch, SpriteFont font, string text, Color color, Rectangle bounds,
         AlignX ax = AlignX.LeftAligned, AlignY ay = AlignY.TopAligned)
