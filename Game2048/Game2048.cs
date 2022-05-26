@@ -63,7 +63,7 @@ internal class Game2048 : Game, IObserver<IGameCore>
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         _gameContent = new GameContent(Content, GraphicsDevice);
         _infoPanel = new InfoPanel(_viewportAdapter, _spriteBatch, _gameContent, new Rectangle(0, 0, RESOLUTION.X, 100));
-        _mainPanel = new MainPanel(_spriteBatch, _gameContent, new Rectangle(0, 100, RESOLUTION.X, RESOLUTION.Y));
+        _mainPanel = new MainPanel(_spriteBatch, _gameContent, new Rectangle(0, 100, RESOLUTION.X, RESOLUTION.Y - 100));
         _gameCore.Init(true);
     }
 
@@ -82,7 +82,7 @@ internal class Game2048 : Game, IObserver<IGameCore>
             _gameCore.Action(Direction.Up);
         else if (gamepadState.DPad.Down == ButtonState.Pressed || (keyboardState.IsKeyDown(Keys.Down) && keyboardState.WasKeyJustUp(Keys.Down)))
             _gameCore.Action(Direction.Down);
-        
+
         _infoPanel.Update();
 
         base.Update(gameTime);
@@ -118,6 +118,7 @@ internal class Game2048 : Game, IObserver<IGameCore>
             }
         }
         _mainPanel.Cells = _cells;
+        _mainPanel.GameState = gameCore.GameState;
     }
 
     public void OnCompleted()
