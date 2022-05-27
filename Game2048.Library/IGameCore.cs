@@ -9,4 +9,5 @@ public interface IGameCore : IObservable<IGameCore>
     ICell? GetCell(int row, int col);
     void Action(Direction direction);
     void Init(bool clear);
+    void LoadSavedGame(Save saveType);
 }

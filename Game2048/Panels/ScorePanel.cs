@@ -20,7 +20,7 @@ internal class ScorePanel
     private readonly string _title;
 
 
-    internal int Score { get; set; } = 0;
+    internal int Score { get; set; }
 
     internal ScorePanel(SpriteBatch spriteBatch, GameContent gameContent, ScoreType scoreType, Rectangle bounds)
     {
@@ -43,10 +43,6 @@ internal class ScorePanel
     internal void Draw()
     { 
         _spriteBatch.DrawString(_smallFont, _title, DisplayConstants.COLOR_LIGHT_ALT, _upperRectangle, Extensions.AlignX.CenterAligned, Extensions.AlignY.BottomAligned);
-        _spriteBatch.DrawString(_mediumFont, _title, Color.White, _bottomRectangle, Extensions.AlignX.CenterAligned, Extensions.AlignY.TopAligned);
-
-        //_spriteBatch.DrawString(_font, _title, new Vector2(_upperRectangle.GetCenter().X, _bounds.GetCenter().Y), Color.White);
-        //_spriteBatch.DrawString(_font, _title, _upperRectangle, Extensions.Alignment.Bottom | Extensions.Alignment.Center, DisplayConstants.COLOR_LIGHT_ALT, .2f);
-        //_spriteBatch.DrawString(_font, _title, _bottomRectangle, Extensions.Alignment.Top | Extensions.Alignment.Center, DisplayConstants.COLOR_LIGHT_ALT, .2f);
+        _spriteBatch.DrawString(_mediumFont, Score.ToString(), Color.White, _bottomRectangle, Extensions.AlignX.CenterAligned, Extensions.AlignY.TopAligned);
     }
 }

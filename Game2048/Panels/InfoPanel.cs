@@ -1,6 +1,5 @@
-﻿using Game2048.Drawables;
+﻿using Game2048.Buttons;
 using Game2048.Helpers;
-using Game2048.Library;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.ViewportAdapters;
@@ -24,7 +23,7 @@ namespace Game2048.Panels
         internal int HighScore { get; set; }
         #endregion
 
-        internal InfoPanel(ViewportAdapter viewportAdapter, SpriteBatch spriteBatch, GameContent gameContent, Rectangle bounds)
+        internal InfoPanel(IGameButtonsOwner buttonSubscriber, ViewportAdapter viewportAdapter, SpriteBatch spriteBatch, GameContent gameContent, Rectangle bounds)
         {
             _spriteBatch = spriteBatch;
 
@@ -39,12 +38,18 @@ namespace Game2048.Panels
             var highScoreX = currScoreX + scoreWidth;
             _highScorePanel = new ScorePanel(_spriteBatch, gameContent, ScorePanel.ScoreType.HighScore, new Rectangle(highScoreX, bounds.Y, scoreWidth, bounds.Height));
 
-            var prevMoveX = highScoreX + scoreWidth;
+            var buttonsSharedInfo = new ButtonsSharedInfo();
+
             var buttonWidth = bounds.Width * 5 / 32;
-            _previousMoveButton = new Button(viewportAdapter, _spriteBatch, gameContent.PreviousMoveButtonTexture, new Rectangle(prevMoveX, bounds.Y, buttonWidth, bounds.Height), null);
+            var prevMoveX = highScoreX + scoreWidth;
+            var prevMoveBounds = new Rectangle(prevMoveX, bounds.Y, buttonWidth, bounds.Height);
+            _previousMoveButton = new Button(buttonsSharedInfo, viewportAdapter, _spriteBatch, gameContent.PreviousMoveButtonTexture, prevMoveBounds);
+            buttonSubscriber.PreviousMoveButton = _previousMoveButton;
 
             var newGameX = prevMoveX + buttonWidth;
-            _newGameButton = new Button(viewportAdapter, _spriteBatch, gameContent.NewGameButtonTexture, new Rectangle(newGameX, bounds.Y, buttonWidth, bounds.Height), null);
+            var newGameBounds = new Rectangle(newGameX, bounds.Y, buttonWidth, bounds.Height);
+            _newGameButton = new Button(buttonsSharedInfo, viewportAdapter, _spriteBatch, gameContent.NewGameButtonTexture, newGameBounds);
+            buttonSubscriber.NewGameButton = _newGameButton;
         }
 
         internal void Draw()
@@ -54,12 +59,6 @@ namespace Game2048.Panels
             _highScorePanel.Draw();
             _previousMoveButton.Draw();
             _newGameButton.Draw();
-        }
-
-        internal void Update()
-        {
-            _previousMoveButton.Update();
-            _newGameButton.Update();
         }
     }
 }

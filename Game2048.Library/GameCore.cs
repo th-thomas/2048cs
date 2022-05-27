@@ -3,7 +3,7 @@
 public class GameCore : IScoreManager, IGameCore
 {
     #region Fields
-    private List<IObserver<IGameCore>> _observers;
+    private readonly List<IObserver<IGameCore>> _observers;
     private readonly Grid _grid;
     // private readonly SaveService _saveService;
     #endregion
@@ -79,27 +79,27 @@ public class GameCore : IScoreManager, IGameCore
         return new Unsubscriber(_observers, observer);
     }
 
-    //public void LoadSavedGame(Save saveType)
-    //{
+    public void LoadSavedGame(Save saveType)
+    {
 
-    //    var snapshot = _saveService.FetchSnapshot(saveType);
-    //    if (snapshot.Grid is null)
-    //    {
-    //        return;
-    //    }
-    //    Score = snapshot.Score;
-    //    for (var row = 0; row < Size; row++)
-    //    {
-    //        for (var col = 0; col < Size; col++)
-    //        {
-    //            int cellValue = snapshot.Grid[row, col];
-    //            _grid.SetCell(row, col, cellValue);
-    //        }
-    //    }
-    //    // TODO
-    //    // setChanged();
-    //    // notifyObservers();
-    //}
+        //var snapshot = _saveService.FetchSnapshot(saveType);
+        //if (snapshot.Grid is null)
+        //{
+        //    return;
+        //}
+        //Score = snapshot.Score;
+        //for (var row = 0; row < Size; row++)
+        //{
+        //    for (var col = 0; col < Size; col++)
+        //    {
+        //        int cellValue = snapshot.Grid[row, col];
+        //        _grid.SetCell(row, col, cellValue);
+        //    }
+        //}
+        // TODO
+        // setChanged();
+        // notifyObservers();
+    }
     #endregion
 
     #region Private methods
