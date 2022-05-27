@@ -79,9 +79,15 @@ internal class Game2048 : Game, IObserver<IGameCore>
         if (gamepadState.Buttons.Back == ButtonState.Pressed || keyboardState.IsKeyDown(Keys.Escape))
             Exit();
         else if (gamepadState.Buttons.LeftShoulder == ButtonState.Pressed || keyboardState.WasKeyJustUp(Keys.F2) || _buttonsManager.PreviousMoveButton?.State == GameButtonState.Released)
+        {
+            _buttonsManager.PreviousMoveButton?.InvokedByKeyboardOrGamepad();
             _gameCore.LoadSavedGame(Save.PreviousMove);
+        }
         else if (gamepadState.Buttons.RightShoulder == ButtonState.Pressed || keyboardState.WasKeyJustUp(Keys.F3) || _buttonsManager.NewGameButton?.State == GameButtonState.Released)
+        {
+            _buttonsManager.NewGameButton?.InvokedByKeyboardOrGamepad();
             _gameCore.Init(true);
+        }
         else if (gamepadState.DPad.Left == ButtonState.Pressed || keyboardState.WasKeyJustUp(Keys.Left))
             _gameCore.Action(Direction.Left);
         else if (gamepadState.DPad.Right == ButtonState.Pressed || keyboardState.WasKeyJustUp(Keys.Right))
