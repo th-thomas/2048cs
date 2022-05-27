@@ -23,7 +23,7 @@ namespace Game2048.Panels
         internal int HighScore { get; set; }
         #endregion
 
-        internal InfoPanel(IGameButtonsOwner buttonSubscriber, ViewportAdapter viewportAdapter, SpriteBatch spriteBatch, GameContent gameContent, Rectangle bounds)
+        internal InfoPanel(ButtonsManager buttonsManager, ViewportAdapter viewportAdapter, SpriteBatch spriteBatch, GameContent gameContent, Rectangle bounds)
         {
             _spriteBatch = spriteBatch;
 
@@ -44,12 +44,12 @@ namespace Game2048.Panels
             var prevMoveX = highScoreX + scoreWidth;
             var prevMoveBounds = new Rectangle(prevMoveX, bounds.Y, buttonWidth, bounds.Height);
             _previousMoveButton = new Button(buttonsSharedInfo, viewportAdapter, _spriteBatch, gameContent.PreviousMoveButtonTexture, prevMoveBounds);
-            buttonSubscriber.PreviousMoveButton = _previousMoveButton;
+            buttonsManager.PreviousMoveButton = _previousMoveButton;
 
             var newGameX = prevMoveX + buttonWidth;
             var newGameBounds = new Rectangle(newGameX, bounds.Y, buttonWidth, bounds.Height);
             _newGameButton = new Button(buttonsSharedInfo, viewportAdapter, _spriteBatch, gameContent.NewGameButtonTexture, newGameBounds);
-            buttonSubscriber.NewGameButton = _newGameButton;
+            buttonsManager.NewGameButton = _newGameButton;
         }
 
         internal void Draw()

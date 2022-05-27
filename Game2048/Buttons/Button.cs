@@ -1,6 +1,7 @@
 ﻿using Game2048.Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.ViewportAdapters;
 using static IButton;
@@ -46,7 +47,7 @@ internal class Button : IButton
         _spriteBatch.Draw(_texture, _bounds, _buttonColor[State]);
     }
 
-    public void Update(MouseStateExtended mouseState)
+    public void Update(GamePadState gamePadState, KeyboardStateExtended keyboardState, MouseStateExtended mouseState)
     {
         if (_bounds.Contains(_viewportAdapter.PointToScreen(mouseState.Position)))
         {
@@ -57,7 +58,6 @@ internal class Button : IButton
             if (mouseState.IsButtonDown(MouseButton.Left))
             {
                 State = GameButtonState.Pressed;
-                
             }
             else
             {

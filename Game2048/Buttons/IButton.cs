@@ -1,4 +1,5 @@
-﻿using MonoGame.Extended.Input;
+﻿using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Input;
 
 internal interface IButton
 {
@@ -10,5 +11,5 @@ internal interface IButton
         Released
     }
     GameButtonState State { get; }
-    void Update(MouseStateExtended mouseState);
+    void Update(GamePadState gamePadState, KeyboardStateExtended keyboardState, MouseStateExtended mouseState);
 }

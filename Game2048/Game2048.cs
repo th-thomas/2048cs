@@ -12,7 +12,7 @@ using static IButton;
 
 namespace Game2048;
 
-internal class Game2048 : Game, IObserver<IGameCore>, IGameButtonsOwner
+internal class Game2048 : Game, IObserver<IGameCore>
 {
     #region Fields
     private ViewportAdapter _viewportAdapter;
@@ -21,16 +21,12 @@ internal class Game2048 : Game, IObserver<IGameCore>, IGameButtonsOwner
     private readonly IGameCore _gameCore;
     private GameContent _gameContent;
     private readonly ICell?[,] _cells;
+    private readonly ButtonsManager _buttonsManager = new();
     #endregion
 
     #region Drawables
     private InfoPanel _infoPanel;
     private MainPanel _mainPanel;
-    #endregion
-
-    #region Properties
-    public IButton NewGameButton { get; set; }
-    public IButton PreviousMoveButton { get; set; }
     #endregion
 
     internal Game2048(IGameCore gameCore)
@@ -69,7 +65,7 @@ internal class Game2048 : Game, IObserver<IGameCore>, IGameButtonsOwner
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         _gameContent = new GameContent(Content, GraphicsDevice);
-        _infoPanel = new InfoPanel(this, _viewportAdapter, _spriteBatch, _gameContent, new Rectangle(0, 0, RESOLUTION.X, 100));
+        _infoPanel = new InfoPanel(_buttonsManager, _viewportAdapter, _spriteBatch, _gameContent, new Rectangle(0, 0, RESOLUTION.X, 100));
         _mainPanel = new MainPanel(_spriteBatch, _gameContent, new Rectangle(0, 100, RESOLUTION.X, RESOLUTION.Y - 100));
         _gameCore.Init(true);
     }
@@ -82,9 +78,9 @@ internal class Game2048 : Game, IObserver<IGameCore>, IGameButtonsOwner
 
         if (gamepadState.Buttons.Back == ButtonState.Pressed || keyboardState.IsKeyDown(Keys.Escape))
             Exit();
-        else if (gamepadState.Buttons.LeftShoulder == ButtonState.Pressed || keyboardState.WasKeyJustUp(Keys.F2) || PreviousMoveButton.State == GameButtonState.Released)
+        else if (gamepadState.Buttons.LeftShoulder == ButtonState.Pressed || keyboardState.WasKeyJustUp(Keys.F2) || _buttonsManager.PreviousMoveButton?.State == GameButtonState.Released)
             _gameCore.LoadSavedGame(Save.PreviousMove);
-        else if (gamepadState.Buttons.RightShoulder == ButtonState.Pressed || keyboardState.WasKeyJustUp(Keys.F3) || NewGameButton.State == GameButtonState.Released)
+        else if (gamepadState.Buttons.RightShoulder == ButtonState.Pressed || keyboardState.WasKeyJustUp(Keys.F3) || _buttonsManager.NewGameButton?.State == GameButtonState.Released)
             _gameCore.Init(true);
         else if (gamepadState.DPad.Left == ButtonState.Pressed || keyboardState.WasKeyJustUp(Keys.Left))
             _gameCore.Action(Direction.Left);
@@ -95,8 +91,9 @@ internal class Game2048 : Game, IObserver<IGameCore>, IGameButtonsOwner
         else if (gamepadState.DPad.Down == ButtonState.Pressed || keyboardState.WasKeyJustUp(Keys.Down))
             _gameCore.Action(Direction.Down);
 
-        PreviousMoveButton.Update(mouseState);
-        NewGameButton.Update(mouseState);
+        _buttonsManager.PreviousMoveButton?.Update(gamepadState, keyboardState, mouseState);
+        _buttonsManager.NewGameButton?.Update(gamepadState, keyboardState, mouseState);
+
         base.Update(gameTime);
     }
 
