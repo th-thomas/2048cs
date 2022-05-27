@@ -123,8 +123,8 @@ internal class Game2048 : Game, IObserver<IGameCore>
 
     public void OnNext(IGameCore gameCore)
     {
-        _infoPanel.Score = gameCore.Score;
-        _infoPanel.HighScore = gameCore.HighScore;
+        _infoPanel.UpdateScore(gameCore.Score);
+        _infoPanel.UpdateHighScore(gameCore.HighScore);
         for (var row = 0; row < gameCore.Size; row++)
         {
             for (var col = 0; col < gameCore.Size; col++)

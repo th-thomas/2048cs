@@ -18,11 +18,6 @@ namespace Game2048.Panels
         private readonly Rectangle _titleBounds;
         #endregion
 
-        #region Properties
-        internal int Score { get; set; }
-        internal int HighScore { get; set; }
-        #endregion
-
         internal InfoPanel(ButtonsManager buttonsManager, ViewportAdapter viewportAdapter, SpriteBatch spriteBatch, GameContent gameContent, Rectangle bounds)
         {
             _spriteBatch = spriteBatch;
@@ -59,6 +54,16 @@ namespace Game2048.Panels
             _highScorePanel.Draw();
             _previousMoveButton.Draw();
             _newGameButton.Draw();
+        }
+
+        internal void UpdateScore(int score)
+        {
+            _currentScorePanel.Score = score;
+        }
+
+        internal void UpdateHighScore(int score)
+        {
+            _highScorePanel.Score = score;
         }
     }
 }
