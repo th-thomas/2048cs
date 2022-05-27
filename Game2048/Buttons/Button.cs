@@ -20,16 +20,17 @@ internal class Button : IButton
 
     private static readonly Dictionary<GameButtonState, Color> _buttonColor = new()
     {
-        { GameButtonState.None, Color.White },
+        { GameButtonState.Enabled, Color.White },
         { GameButtonState.Released, Color.White },
         { GameButtonState.Pressed, DisplayConstants.COLOR_DARK },
-        { GameButtonState.Hovered, new Color(DisplayConstants.COLOR_DARK, 127) }
+        { GameButtonState.Hovered, new Color(DisplayConstants.COLOR_DARK, 192) },
+        { GameButtonState.Disabled, new Color(DisplayConstants.COLOR_DARK, 127) }
     };
     #endregion
 
-    #region Properties
-    public GameButtonState State { get; set; } = GameButtonState.None;
-    #endregion
+    public GameButtonState State { get; private set; } = GameButtonState.Enabled;
+    public void Disable() => State = GameButtonState.Disabled;
+    public void Enable() => State = GameButtonState.Enabled;
 
     internal Button(ButtonsSharedInfo buttonsSharedInfo, ViewportAdapter viewportAdapter, SpriteBatch spriteBatch, Texture2D texture, Rectangle bounds)
     {
@@ -55,6 +56,11 @@ internal class Button : IButton
 
     public void Update(GamePadState gamePadState, KeyboardStateExtended keyboardState, MouseStateExtended mouseState)
     {
+        if (State == GameButtonState.Disabled)
+        {
+            return;
+        }
+
         if (_invoked)
         {
             State = GameButtonState.Pressed;
@@ -87,7 +93,7 @@ internal class Button : IButton
         }
         else
         {
-            State = GameButtonState.None;
+            State = GameButtonState.Enabled;
         }
     }
 }

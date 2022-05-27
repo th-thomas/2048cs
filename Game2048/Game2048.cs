@@ -145,12 +145,12 @@ internal class Game2048 : Game, IObserver<IGameCore>
         throw new NotImplementedException();
     }
 
-    public virtual void Subscribe(IGameCore provider)
+    public void Subscribe(IGameCore provider)
     {
         _cancellation = provider.Subscribe(this);
     }
 
-    public virtual void Unsubscribe()
+    public void Unsubscribe()
     {
         _cancellation.Dispose();
     }
