@@ -32,13 +32,18 @@ public class SaveService : ISaveService
     {
         get
         {
-            int index = (int)i;
+            var index = (int)i;
             var lines = File.ReadLines(_savefilePath);
-            return (lines.Count() < index) ? "" : File.ReadLines(_savefilePath).ElementAt((int)i);
+            return (lines.Count() < index) ? "" : File.ReadLines(_savefilePath).ElementAt(index);
         }
         set
         {
-            var lines = File.ReadAllLines(_savefilePath);
+            var index = (int)i;
+            var lines = File.ReadAllLines(_savefilePath).ToList();
+            while (lines.Count <= index)
+            {
+                lines.Add(string.Empty);
+            }
             lines[(int)i] = value;
             File.WriteAllLines(_savefilePath, lines);
         }
