@@ -1,53 +1,75 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.Text;
+﻿using System.Text;
 
 namespace Game2048.Library;
 
-public class SaveService
+public class SaveService : ISaveService
 {
-    private readonly IConfiguration _config;
-    private readonly int _gameSize;
-
-    #region Constants
-    private const string HIGHSCORE_KEY = "highScore";
-    private const string PREVIOUSGAME_SCORE_KEY = "previousGameScore";
-    private const string PREVIOUSGAME_GRID_KEY = "previousGameGrid";
-    private const string PREVIOUSMOVE_SCORE_KEY = "previousMoveScore";
-    private const string PREVIOUSMOVE_GRID_KEY = "previousMoveGrid";
-    #endregion
-
-    public SaveService(GameCore game, IConfiguration configuration)
+    private enum ValueIndex
     {
-        _config = configuration;
-        _gameSize = game.Size;
+        HighScore,
+        PreviousGameScore,
+        PreviousGameGrid,
+        PreviousMoveScore,
+        PreviousMoveGrid
+    }
+
+    private static SaveService _saveService;
+    private readonly int _gameSize;
+    private readonly string _savefilePath;
+
+    private SaveService(int gameSize, string savefilePath)
+    {
+        _gameSize = gameSize;
+        _savefilePath = savefilePath;
+    }
+
+    public static SaveService GetSaveService(int gameSize, string savefilePath)
+    {
+        return _saveService ??= new SaveService(gameSize, savefilePath);
+    }
+
+    private string this[ValueIndex i]
+    {
+        get
+        {
+            int index = (int)i;
+            var lines = File.ReadLines(_savefilePath);
+            return (lines.Count() < index) ? "" : File.ReadLines(_savefilePath).ElementAt((int)i);
+        }
+        set
+        {
+            var lines = File.ReadAllLines(_savefilePath);
+            lines[(int)i] = value;
+            File.WriteAllLines(_savefilePath, lines);
+        }
     }
 
     #region Public methods
     public int FetchHighScore()
     {
-        return int.TryParse(_config[HIGHSCORE_KEY], out int highScore) ? highScore : 0;
+        return int.TryParse(this[ValueIndex.HighScore], out int highScore) ? highScore : 0;
     }
 
     public void SaveHighScore(int score)
     {
-        _config[HIGHSCORE_KEY] = score.ToString();
+        this[ValueIndex.HighScore] = score.ToString();
     }
 
     public GameSnapshot FetchSnapshot(Save saveType)
     {
-        var snapshotScoreKey = saveType == Save.PreviousGame
-                ? PREVIOUSGAME_SCORE_KEY
-                : PREVIOUSMOVE_SCORE_KEY;
+        var snapshotScoreIndex = saveType == Save.PreviousGame
+                ? ValueIndex.PreviousGameScore
+                : ValueIndex.PreviousMoveScore;
 
         var snapshotGridKey = saveType == Save.PreviousGame
-                ? PREVIOUSGAME_GRID_KEY
-                : PREVIOUSMOVE_GRID_KEY;
+                ? ValueIndex.PreviousGameGrid
+                : ValueIndex.PreviousMoveGrid;
 
-        var score = int.TryParse(_config[snapshotScoreKey], out int parsedScore) ? parsedScore : 0;
-        var gridAsText = _config[snapshotGridKey];
+        var score = int.TryParse(this[snapshotScoreIndex], out int parsedScore) ? parsedScore : 0;
+        var gridAsText = this[snapshotGridKey];
         int[,]? grid = null;
 
-        if (gridAsText is not null)
+        if (gridAsText != string.Empty)
         {
             grid = new int[_gameSize, _gameSize];
             var cellStringValues = gridAsText.Split(";");
@@ -89,12 +111,12 @@ public class SaveService
         switch (saveType)
         {
             case Save.PreviousGame:
-                _config[PREVIOUSGAME_GRID_KEY] = grid;
-                _config[PREVIOUSGAME_SCORE_KEY] = snapshot.Score.ToString();
+                this[ValueIndex.PreviousGameGrid] = grid;
+                this[ValueIndex.PreviousGameScore] = snapshot.Score.ToString();
                 break;
             case Save.PreviousMove:
-                _config[PREVIOUSMOVE_GRID_KEY] = grid;
-                _config[PREVIOUSMOVE_SCORE_KEY] = snapshot.Score.ToString();
+                this[ValueIndex.PreviousMoveGrid] = grid;
+                this[ValueIndex.PreviousMoveScore] = snapshot.Score.ToString();
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(saveType));
@@ -103,8 +125,8 @@ public class SaveService
 
     public void ClearPreviousMove()
     {
-        _config[PREVIOUSMOVE_GRID_KEY] = null;
-        _config[PREVIOUSGAME_SCORE_KEY] = null;
+        this[ValueIndex.PreviousMoveGrid] = string.Empty;
+        this[ValueIndex.PreviousGameScore] = string.Empty;
     }
     #endregion
 }

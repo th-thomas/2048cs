@@ -8,6 +8,6 @@ public interface IGameCore : IObservable<IGameCore>
     GameState GameState { get; }
     ICell? GetCell(int row, int col);
     void Action(Direction direction);
-    void Init(bool clear);
+    void Reset();
     void LoadSavedGame(Save saveType);
 }

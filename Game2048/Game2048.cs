@@ -66,7 +66,7 @@ internal class Game2048 : Game, IObserver<IGameCore>
         _gameContent = new GameContent(Content, GraphicsDevice);
         _infoPanel = new InfoPanel(_buttonsManager, _viewportAdapter, _spriteBatch, _gameContent, new Rectangle(0, 0, RESOLUTION.X, 100));
         _mainPanel = new MainPanel(_spriteBatch, _gameContent, new Rectangle(0, 100, RESOLUTION.X, RESOLUTION.Y - 100));
-        _gameCore.Init(true);
+        _gameCore.LoadSavedGame(Save.PreviousGame);
     }
 
     protected override void Update(GameTime gameTime)
@@ -85,7 +85,7 @@ internal class Game2048 : Game, IObserver<IGameCore>
         else if (gamepadState.Buttons.RightShoulder == ButtonState.Pressed || keyboardState.WasKeyJustUp(Keys.F3) || _buttonsManager.NewGameButton?.State == GameButtonState.Released)
         {
             _buttonsManager.NewGameButton?.InvokedByKeyboardOrGamepad();
-            _gameCore.Init(true);
+            _gameCore.Reset();
         }
         else if (gamepadState.DPad.Left == ButtonState.Pressed || keyboardState.WasKeyJustUp(Keys.Left))
             _gameCore.Action(Direction.Left);
