@@ -28,10 +28,6 @@ internal class Button : IButton
     };
     #endregion
 
-    public GameButtonState State { get; private set; } = GameButtonState.Enabled;
-    public void Disable() => State = GameButtonState.Disabled;
-    public void Enable() => State = GameButtonState.Enabled;
-
     internal Button(ButtonsSharedInfo buttonsSharedInfo, ViewportAdapter viewportAdapter, SpriteBatch spriteBatch, Texture2D texture, Rectangle bounds)
     {
         _buttonsSharedInfo = buttonsSharedInfo;
@@ -43,6 +39,10 @@ internal class Button : IButton
         var originY = bounds.Y + bounds.Height / 2 - 45;
         _bounds = new Rectangle(originX, originY, 90, 90);
     }
+
+    public GameButtonState State { get; private set; } = GameButtonState.Enabled;
+
+    public void Enable(bool flag) => State = flag ? GameButtonState.Enabled : GameButtonState.Disabled;
 
     public void InvokedByKeyboardOrGamepad()
     {
