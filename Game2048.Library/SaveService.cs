@@ -23,7 +23,7 @@ public class SaveService : ISaveService
         _savefilePath = savefilePath;
     }
 
-    public static SaveService GetSaveService(int gameSize, string savefilePath)
+    public static SaveService GetInstance(int gameSize, string savefilePath)
     {
         return _saveService ??= new SaveService(gameSize, savefilePath);
     }
