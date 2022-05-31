@@ -28,7 +28,9 @@ internal class Game2048 : Game, IObserver<IGameCore>
     private MainPanel _mainPanel;
     #endregion
 
+#pragma warning disable CS8618
     internal Game2048(IGameCore gameCore)
+#pragma warning restore CS8618
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
