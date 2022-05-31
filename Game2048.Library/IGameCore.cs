@@ -6,6 +6,7 @@ public interface IGameCore : IObservable<IGameCore>
     int Score { get; }
     int HighScore { get; }
     GameState GameState { get; }
+    bool IsPreviousMovePossible { get; }
     ICell? GetCell(int row, int col);
     void Action(Direction direction);
     void Reset();

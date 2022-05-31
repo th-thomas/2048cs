@@ -41,8 +41,9 @@ internal class Grid
         }
         else
         {
-            _cellsArray[row, col] = new Cell(value, this, _game);
-            _cellsMap.Add(_cellsArray[row, col], new Point(col, row));
+            var newCell = new Cell(value, this, _game);
+            _cellsArray[row, col] = newCell;
+            _cellsMap.Add(newCell, new Point(col, row));
         }
     }
 
@@ -157,9 +158,9 @@ internal class Grid
     {
         var cell1Value = RandCellValue();
         var cell1Pos = RandCellPosition();
-
-        _cellsArray[cell1Pos.Y, cell1Pos.X] = new Cell(cell1Value, this, _game);
-        _cellsMap.Add(_cellsArray[cell1Pos.Y, cell1Pos.X], cell1Pos);
+        var newCell1 = new Cell(cell1Value, this, _game);
+        _cellsArray[cell1Pos.Y, cell1Pos.X] = newCell1;
+        _cellsMap.Add(newCell1, cell1Pos);
 
         var cell2Value = RandCellValue();
         Point cell2Pos;
@@ -167,8 +168,9 @@ internal class Grid
         {
             cell2Pos = RandCellPosition();
         } while (cell2Pos == cell1Pos);
-        _cellsArray[cell2Pos.Y, cell2Pos.X] = new Cell(cell2Value, this, _game);
-        _cellsMap.Add(_cellsArray[cell2Pos.Y, cell2Pos.X], cell2Pos);
+        var newCell2 = new Cell(cell2Value, this, _game);
+        _cellsArray[cell2Pos.Y, cell2Pos.X] = newCell2;
+        _cellsMap.Add(newCell2, cell2Pos);
     }
 
     internal void SpawnNewCell()
@@ -178,9 +180,9 @@ internal class Grid
         {
             spawnPoint = RandCellPosition();
         } while (_cellsArray[spawnPoint.Y, spawnPoint.X] is not null);
-
-        _cellsArray[spawnPoint.Y, spawnPoint.X] = new Cell(RandCellValue(), this, _game);
-        _cellsMap.Add(_cellsArray[spawnPoint.Y, spawnPoint.X], spawnPoint);
+        var newCell = new Cell(RandCellValue(), this, _game);
+        _cellsArray[spawnPoint.Y, spawnPoint.X] = newCell;
+        _cellsMap.Add(newCell, spawnPoint);
     }
     #endregion
 

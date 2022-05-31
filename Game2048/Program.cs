@@ -3,12 +3,12 @@ using System.Reflection;
 
 namespace Game2048;
 
-public static class Program
+internal static class Program
 {
     private const int GAME_SIZE = 4;
 
     [STAThread]
-    static void Main()
+    internal static void Main()
     {
         var dirSep = Path.DirectorySeparatorChar;
         var saveFile = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{dirSep}save.txt";

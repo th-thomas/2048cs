@@ -14,6 +14,7 @@ public class GameCore : IScoreManager, IGameCore
     public GameState GameState { get; private set; } = GameState.Ongoing;
     public int Score { get; private set; }
     public int HighScore => _saveService.FetchHighScore();
+    public bool IsPreviousMovePossible { get; private set; }
     #endregion
 
     public GameCore(int size, ISaveService saveService)
@@ -22,6 +23,9 @@ public class GameCore : IScoreManager, IGameCore
         Size = size;
         _grid = new Grid(size, this);
         _saveService = saveService ?? throw new ArgumentNullException(nameof(saveService));
+
+        var previousGameGrid = _saveService.FetchSnapshot(Save.PreviousGame).Grid;
+        //IsPreviousMovePossible = previousGameGrid is not null && previousGameGrid.
     }
 
     #region Publics methods
@@ -96,6 +100,7 @@ public class GameCore : IScoreManager, IGameCore
         }
         GameState = _grid.IsScoreGoalReached ? GameState.Win : _grid.CanAnyCellMove() ? GameState.Ongoing : GameState.Loss;
         _playedLastMovePossible = false;
+        IsPreviousMovePossible = false;
         NotifyObservers();
     }
     #endregion
