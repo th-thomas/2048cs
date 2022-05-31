@@ -6,11 +6,12 @@ public class GameCore : IScoreManager, IGameCore
     private readonly List<IObserver<IGameCore>> _observers;
     private readonly Grid _grid;
     private readonly ISaveService _saveService;
+    private bool _playedLastMovePossible = false;
     #endregion
 
     #region Properties
     public int Size { get; }
-    public GameState GameState { get; private set; }
+    public GameState GameState { get; private set; } = GameState.Ongoing;
     public int Score { get; private set; }
     public int HighScore => _saveService.FetchHighScore();
     #endregion
@@ -26,6 +27,7 @@ public class GameCore : IScoreManager, IGameCore
     #region Publics methods
     public void Reset()
     {
+        _playedLastMovePossible = false;
         GameState = GameState.Ongoing;
         _grid.ClearCells();
         Score = 0;
@@ -46,6 +48,15 @@ public class GameCore : IScoreManager, IGameCore
 
     public void Action(Direction direction)
     {
+        if (_playedLastMovePossible)
+        {
+            return;
+        }
+        if (!_grid.CanAnyCellMove())
+        {
+            _playedLastMovePossible = true;
+            return;
+        }
         SaveSnapshot(Save.PreviousMove);
         if (!_grid.CanAnyCellMove(direction))
         {
@@ -83,6 +94,8 @@ public class GameCore : IScoreManager, IGameCore
                 _grid.SetCell(row, col, cellValue);
             }
         }
+        GameState = _grid.IsScoreGoalReached ? GameState.Win : _grid.CanAnyCellMove() ? GameState.Ongoing : GameState.Loss;
+        _playedLastMovePossible = false;
         NotifyObservers();
     }
     #endregion
