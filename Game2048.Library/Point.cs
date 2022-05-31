@@ -16,7 +16,6 @@ internal struct Point : IEquatable<Point>
 
     public static bool operator !=(Point left, Point right) => !(left == right);
 
-
     public bool Equals(Point other) => (X == other.X) && (Y == other.Y);
 
 #pragma warning disable CS8765
