@@ -19,7 +19,9 @@ internal struct Point : IEquatable<Point>
 
     public bool Equals(Point other) => (X == other.X) && (Y == other.Y);
 
+#pragma warning disable CS8765
     public override bool Equals(object obj) => obj is Point point && Equals(point);
+#pragma warning restore CS8765
 
     public override int GetHashCode() => (X, Y).GetHashCode();
     #endregion
