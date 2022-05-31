@@ -16,7 +16,7 @@ public class GameCore : IScoreManager, IGameCore
     public int HighScore => _saveService.FetchHighScore();
     #endregion
 
-    public GameCore(int size, SaveService saveService)
+    public GameCore(int size, ISaveService saveService)
     {
         _observers = new List<IObserver<IGameCore>>();
         Size = size;

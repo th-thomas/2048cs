@@ -1,8 +1,9 @@
-﻿using System.Text;
+﻿using Game2048.Library;
+using System.Text;
 
-namespace Game2048.Library;
+namespace Game2048;
 
-public class SaveService : ISaveService
+internal class SaveService : ISaveService
 {
     private enum ValueIndex
     {
@@ -25,7 +26,7 @@ public class SaveService : ISaveService
         _savefilePath = savefilePath;
     }
 
-    public static SaveService GetInstance(int gameSize, string savefilePath)
+    internal static SaveService GetInstance(int gameSize, string savefilePath)
     {
         return _saveService ??= new SaveService(gameSize, savefilePath);
     }

@@ -1,6 +1,6 @@
 ﻿namespace Game2048.Library;
 
-internal interface ISaveService
+public interface ISaveService
 {
     int FetchHighScore();
     void SaveHighScore(int score);
