@@ -13,7 +13,9 @@ public class SaveService : ISaveService
         PreviousMoveGrid
     }
 
+#pragma warning disable CS8618
     private static SaveService _saveService;
+#pragma warning restore CS8618
     private readonly int _gameSize;
     private readonly string _savefilePath;
 
