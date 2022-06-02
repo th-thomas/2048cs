@@ -68,7 +68,10 @@ internal class Game2048 : Game, IObserver<IGameCore>
         _gameContent = new GameContent(Content, GraphicsDevice);
         _infoPanel = new InfoPanel(_buttonsManager, _viewportAdapter, _spriteBatch, _gameContent, new Rectangle(0, 0, RESOLUTION.X, 100));
         _mainPanel = new MainPanel(_spriteBatch, _gameContent, new Rectangle(0, 100, RESOLUTION.X, RESOLUTION.Y - 100));
-        _gameCore.LoadSavedGame(Save.PreviousGame);
+        if (!_gameCore.LoadSavedGame(Save.PreviousGame))
+        {
+            _gameCore.Reset();
+        }
     }
 
     protected override void Update(GameTime gameTime)

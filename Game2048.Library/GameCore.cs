@@ -23,9 +23,6 @@ public class GameCore : IScoreManager, IGameCore
         Size = size;
         _grid = new Grid(size, this);
         _saveService = saveService ?? throw new ArgumentNullException(nameof(saveService));
-
-        var previousGameGrid = _saveService.FetchSnapshot(Save.PreviousGame).Grid;
-        //IsPreviousMovePossible = previousGameGrid is not null && previousGameGrid.
     }
 
     #region Publics methods
@@ -82,12 +79,12 @@ public class GameCore : IScoreManager, IGameCore
         return new Unsubscriber(_observers, observer);
     }
 
-    public void LoadSavedGame(Save saveType)
+    public bool LoadSavedGame(Save saveType)
     {
         var snapshot = _saveService.FetchSnapshot(saveType);
         if (snapshot.Grid is null)
         {
-            return;
+            return false;
         }
         Score = snapshot.Score;
         for (var row = 0; row < Size; row++)
@@ -102,6 +99,7 @@ public class GameCore : IScoreManager, IGameCore
         _playedLastMovePossible = false;
         IsPreviousMovePossible = false;
         NotifyObservers();
+        return true;
     }
     #endregion
 

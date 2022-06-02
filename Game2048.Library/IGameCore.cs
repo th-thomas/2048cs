@@ -10,5 +10,5 @@ public interface IGameCore : IObservable<IGameCore>
     ICell? GetCell(int row, int col);
     void Action(Direction direction);
     void Reset();
-    void LoadSavedGame(Save saveType);
+    bool LoadSavedGame(Save saveType);
 }
