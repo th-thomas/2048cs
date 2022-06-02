@@ -53,6 +53,7 @@ public class GameCore : IScoreManager, IGameCore
             return;
         }
         SaveSnapshot(Save.PreviousMove);
+        IsPreviousMovePossible = true;
         _grid.MoveEachCell(direction);
         _grid.SpawnNewCell();
         GameState = _grid.IsScoreGoalReached ? GameState.Win : _grid.CanAnyCellMove() ? GameState.Ongoing : GameState.Loss;
