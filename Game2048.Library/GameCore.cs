@@ -57,6 +57,10 @@ public class GameCore : IScoreManager, IGameCore
         _grid.MoveEachCell(direction);
         _grid.SpawnNewCell();
         GameState = _grid.IsScoreGoalReached ? GameState.Win : _grid.CanAnyCellMove() ? GameState.Ongoing : GameState.Loss;
+        if (GameState == GameState.Win)
+        {
+            IsPreviousMovePossible = false;
+        }
         SaveSnapshot(Save.PreviousGame);
         NotifyObservers();
     }
