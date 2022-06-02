@@ -39,7 +39,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <None Update="save.txt">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
 </Project>

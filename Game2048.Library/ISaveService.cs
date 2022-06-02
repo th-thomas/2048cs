@@ -7,4 +7,5 @@ public interface ISaveService
     GameSnapshot FetchSnapshot(Save saveType);
     void SaveSnapshot(GameSnapshot snapshot, Save saveType);
     void ClearPreviousMove();
+    void ClearAll();
 }

@@ -24,6 +24,10 @@ internal class SaveService : ISaveService
     {
         _gameSize = gameSize;
         _savefilePath = savefilePath;
+        if (!File.Exists(_savefilePath))
+        {
+            File.Create(_savefilePath).Close();
+        }
     }
 
     internal static SaveService GetInstance(int gameSize, string savefilePath)
@@ -37,12 +41,12 @@ internal class SaveService : ISaveService
         {
             var index = (int)i;
             var lines = File.ReadLines(_savefilePath);
-            return (lines.Count() < index) ? "" : File.ReadLines(_savefilePath).ElementAt(index);
+            return (lines.Count() < index) ? string.Empty : lines.ElementAt(index);
         }
         set
         {
             var index = (int)i;
-            var lines = File.ReadAllLines(_savefilePath).ToList();
+            var lines = File.ReadLines(_savefilePath).ToList();
             while (lines.Count <= index)
             {
                 lines.Add(string.Empty);
@@ -80,7 +84,7 @@ internal class SaveService : ISaveService
         if (gridAsText != string.Empty)
         {
             grid = new int[_gameSize, _gameSize];
-            var cellStringValues = gridAsText.Split(";");
+            var cellStringValues = gridAsText.Split(';');
             var i = 0;
             for (var row = 0; row < _gameSize; row++)
             {
@@ -88,7 +92,7 @@ internal class SaveService : ISaveService
                 {
                     grid[row, col] = int.TryParse(cellStringValues[i], out int parsed)
                         ? parsed
-                        : throw new ArithmeticException("Token could not be parsed to Integer type");
+                        : 0;
                     i++;
                 }
             }
@@ -135,6 +139,11 @@ internal class SaveService : ISaveService
     {
         this[ValueIndex.PreviousMoveGrid] = string.Empty;
         this[ValueIndex.PreviousGameScore] = string.Empty;
+    }
+
+    public void ClearAll()
+    {
+        File.WriteAllText(_savefilePath, string.Empty);
     }
     #endregion
 }
