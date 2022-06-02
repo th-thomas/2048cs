@@ -12,7 +12,6 @@ internal interface IButton
         Released
     }
     GameButtonState State { get; }
-    void Update(GamePadState gamePadState, KeyboardStateExtended keyboardState, MouseStateExtended mouseState);
-    void InvokedByKeyboardOrGamepad();
-    void Enable(bool flag);
+    void UpdateDisabled();
+    void Update(GamePadState gamePadState, KeyboardStateExtended keyboardState, MouseStateExtended mouseState, bool invokedByOtherController = false);
 }

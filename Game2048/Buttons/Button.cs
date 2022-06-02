@@ -16,7 +16,6 @@ internal class Button : IButton
     private readonly SpriteBatch _spriteBatch;
     private readonly Texture2D _texture;
     private readonly Rectangle _bounds;
-    private bool _invoked = false;
 
     private static readonly Dictionary<GameButtonState, Color> _buttonColor = new()
     {
@@ -42,29 +41,21 @@ internal class Button : IButton
 
     public GameButtonState State { get; private set; } = GameButtonState.Enabled;
 
-    public void Enable(bool flag) => State = flag ? GameButtonState.Enabled : GameButtonState.Disabled;
-
-    public void InvokedByKeyboardOrGamepad()
-    {
-        _invoked = true;
-    }
-
     internal void Draw()
     {
         _spriteBatch.Draw(_texture, _bounds, _buttonColor[State]);
     }
 
-    public void Update(GamePadState gamePadState, KeyboardStateExtended keyboardState, MouseStateExtended mouseState)
+    public void UpdateDisabled()
     {
-        if (State == GameButtonState.Disabled)
-        {
-            return;
-        }
+        State = GameButtonState.Disabled;
+    }
 
-        if (_invoked)
+    public void Update(GamePadState gamePadState, KeyboardStateExtended keyboardState, MouseStateExtended mouseState, bool invokedByOtherController = false)
+    {
+        if (invokedByOtherController)
         {
             State = GameButtonState.Pressed;
-            _invoked = false;
         }
         else if (_bounds.Contains(_viewportAdapter.PointToScreen(mouseState.Position)))
         {

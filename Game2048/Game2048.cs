@@ -80,16 +80,19 @@ internal class Game2048 : Game, IObserver<IGameCore>
         var keyboardState = KeyboardExtended.GetState();
         var mouseState = MouseExtended.GetState();
 
+        bool prevMoveButtonInvoked = false;
+        bool newGameButtonInvoked = false;
+
         if (gamepadState.Buttons.Back == ButtonState.Pressed || keyboardState.IsKeyDown(Keys.Escape))
             Exit();
         else if (gamepadState.Buttons.LeftShoulder == ButtonState.Pressed || keyboardState.WasKeyJustUp(Keys.F2) || _buttonsManager.PreviousMoveButton?.State == GameButtonState.Released)
         {
-            _buttonsManager.PreviousMoveButton?.InvokedByKeyboardOrGamepad();
+            prevMoveButtonInvoked = true;
             _gameCore.LoadSavedGame(Save.PreviousMove);
         }
         else if (gamepadState.Buttons.RightShoulder == ButtonState.Pressed || keyboardState.WasKeyJustUp(Keys.F3) || _buttonsManager.NewGameButton?.State == GameButtonState.Released)
         {
-            _buttonsManager.NewGameButton?.InvokedByKeyboardOrGamepad();
+            newGameButtonInvoked = true;
             _gameCore.Reset();
         }
         else if (gamepadState.DPad.Left == ButtonState.Pressed || keyboardState.WasKeyJustUp(Keys.Left))
@@ -100,9 +103,11 @@ internal class Game2048 : Game, IObserver<IGameCore>
             _gameCore.Action(Direction.Up);
         else if (gamepadState.DPad.Down == ButtonState.Pressed || keyboardState.WasKeyJustUp(Keys.Down))
             _gameCore.Action(Direction.Down);
-
-        _buttonsManager.PreviousMoveButton?.Update(gamepadState, keyboardState, mouseState);
-        _buttonsManager.NewGameButton?.Update(gamepadState, keyboardState, mouseState);
+        if (_gameCore.IsPreviousMovePossible)
+            _buttonsManager.PreviousMoveButton?.Update(gamepadState, keyboardState, mouseState, prevMoveButtonInvoked);
+        else
+            _buttonsManager.PreviousMoveButton?.UpdateDisabled();
+        _buttonsManager.NewGameButton?.Update(gamepadState, keyboardState, mouseState, newGameButtonInvoked);
 
         base.Update(gameTime);
     }
