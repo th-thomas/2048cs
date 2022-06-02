@@ -17,8 +17,8 @@ internal class GameContent
     {
         EmptyTexture = new Texture2D(graphics, 1, 1, false, SurfaceFormat.Color);
         EmptyTexture.SetData(new[] { Color.White });
-        PreviousMoveButtonTexture = contentManager.Load<Texture2D>($"bitmap{Path.DirectorySeparatorChar}back");
-        NewGameButtonTexture = contentManager.Load<Texture2D>($"bitmap{Path.DirectorySeparatorChar}refresh");
+        PreviousMoveButtonTexture = contentManager.Load<Texture2D>($"bitmaps{Path.DirectorySeparatorChar}back");
+        NewGameButtonTexture = contentManager.Load<Texture2D>($"bitmaps{Path.DirectorySeparatorChar}refresh");
         FontBig = contentManager.Load<SpriteFont>($"fonts{Path.DirectorySeparatorChar}FreeSansBoldBig");
         FontMedium = contentManager.Load<SpriteFont>($"fonts{Path.DirectorySeparatorChar}FreeSansBoldMedium");
         FontSmall = contentManager.Load<SpriteFont>($"fonts{Path.DirectorySeparatorChar}FreeSansBoldSmall");
