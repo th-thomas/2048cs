@@ -14,7 +14,7 @@ internal class MainPanel
     private readonly Texture2D _emptyTexture;
     private readonly SpriteFont _font;
     private Rectangle _cellRectangle;
-    private readonly Dictionary<GameState, string> _endgameText = new() { { GameState.Loss, "PERDU" }, { GameState.Win, "GAGNÉ" } };
+    private readonly Dictionary<GameState, string> _endgameText = new() { { GameState.Loss, "PERDU" }, { GameState.Win, "GAGNE" } };
     private readonly Color _endgameDimColor = new(127, 127, 127, 127);
 
     internal ICell?[,]? Cells { get; set; }
