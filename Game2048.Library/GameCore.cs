@@ -6,7 +6,6 @@ public class GameCore : IScoreManager, IGameCore
     private readonly List<IObserver<IGameCore>> _observers;
     private readonly Grid _grid;
     private readonly ISaveService _saveService;
-    private bool _playedLastMovePossible = false;
     #endregion
 
     #region Properties
@@ -29,7 +28,6 @@ public class GameCore : IScoreManager, IGameCore
     public void Reset()
     {
         IsPreviousMovePossible = false;
-        _playedLastMovePossible = false;
         GameState = GameState.Ongoing;
         _grid.ClearCells();
         Score = 0;
@@ -50,16 +48,7 @@ public class GameCore : IScoreManager, IGameCore
 
     public void Action(Direction direction)
     {
-        if (_playedLastMovePossible)
-        {
-            return;
-        }
-        if (!_grid.CanAnyCellMove())
-        {
-            _playedLastMovePossible = true;
-            return;
-        }
-        if (!_grid.CanAnyCellMove(direction))
+        if (!_grid.CanAnyCellMove() || !_grid.CanAnyCellMove(direction))
         {
             return;
         }
@@ -83,25 +72,9 @@ public class GameCore : IScoreManager, IGameCore
     public bool LoadSavedGame(Save saveType)
     {
         var snapshot = _saveService.FetchSnapshot(saveType);
-        if (snapshot.Grid is null)
+        if (!TrySetGameState(snapshot, saveType))
         {
             return false;
-        }
-        Score = snapshot.Score;
-        for (var row = 0; row < Size; row++)
-        {
-            for (var col = 0; col < Size; col++)
-            {
-                int cellValue = snapshot.Grid[row, col];
-                _grid.SetCell(row, col, cellValue);
-            }
-        }
-        GameState = _grid.IsScoreGoalReached ? GameState.Win : _grid.CanAnyCellMove() ? GameState.Ongoing : GameState.Loss;
-        _playedLastMovePossible = false;
-        IsPreviousMovePossible = false;
-        if (saveType == Save.PreviousMove)
-        {
-            SaveSnapshot(Save.PreviousGame);
         }
         NotifyObservers();
         return true;
@@ -133,6 +106,41 @@ public class GameCore : IScoreManager, IGameCore
 
         var snapshot = new GameSnapshot(saveGrid, Score);
         _saveService.SaveSnapshot(snapshot, saveType);
+    }
+
+    private bool TrySetGameState(GameSnapshot snapshot, Save saveType)
+    {
+        if (snapshot.Grid is null)
+        {
+            IsPreviousMovePossible = false;
+            return false;
+        }
+
+        Score = snapshot.Score;
+
+        for (var row = 0; row < Size; row++)
+        {
+            for (var col = 0; col < Size; col++)
+            {
+                int cellValue = snapshot.Grid[row, col];
+                _grid.SetCell(row, col, cellValue);
+            }
+        }
+
+        GameState = _grid.IsScoreGoalReached ? GameState.Win : _grid.CanAnyCellMove() ? GameState.Ongoing : GameState.Loss;
+        
+        if (saveType == Save.PreviousMove)
+        {
+            IsPreviousMovePossible = false;
+            SaveSnapshot(Save.PreviousGame);
+        }
+        else
+        {
+            var previousMoveGrid = _saveService.FetchSnapshot(Save.PreviousMove).Grid;
+            IsPreviousMovePossible = previousMoveGrid is not null && !_grid.IsGridLikeMe(previousMoveGrid);
+        }
+
+        return true;
     }
     #endregion
 }

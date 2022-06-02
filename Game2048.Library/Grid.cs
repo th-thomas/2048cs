@@ -184,6 +184,36 @@ internal class Grid
         _cellsArray[spawnPoint.Y, spawnPoint.X] = newCell;
         _cellsMap.Add(newCell, spawnPoint);
     }
+
+    public bool IsGridLikeMe(int[,] grid)
+    {
+        if (grid.GetLength(0) != _size || grid.GetLength(1) != _size)
+        {
+            return false;
+        }
+
+        for (var row = 0; row < _size; row++)
+        {
+            for (var col = 0; col < _size; col++)
+            {
+                var gridCell = _cellsArray[row, col];
+                var extCell = grid[row, col];
+                if (gridCell is null)
+                {
+                    if (extCell != 0)
+                    {
+                        return false;
+                    }
+                }
+                else if (gridCell.Value != extCell)
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
     #endregion
 
     #region Private methods
