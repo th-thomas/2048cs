@@ -28,6 +28,7 @@ public class GameCore : IScoreManager, IGameCore
     #region Publics methods
     public void Reset()
     {
+        IsPreviousMovePossible = false;
         _playedLastMovePossible = false;
         GameState = GameState.Ongoing;
         _grid.ClearCells();
