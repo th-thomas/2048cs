@@ -98,6 +98,10 @@ public class GameCore : IScoreManager, IGameCore
         GameState = _grid.IsScoreGoalReached ? GameState.Win : _grid.CanAnyCellMove() ? GameState.Ongoing : GameState.Loss;
         _playedLastMovePossible = false;
         IsPreviousMovePossible = false;
+        if (saveType == Save.PreviousMove)
+        {
+            SaveSnapshot(Save.PreviousGame);
+        }
         NotifyObservers();
         return true;
     }
