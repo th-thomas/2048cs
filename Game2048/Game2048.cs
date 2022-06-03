@@ -43,6 +43,7 @@ internal class Game2048 : Game, IObserver<IGameCore>
 
     protected override void Initialize()
     {
+        Window.Title = "2048";
         _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, RESOLUTION.X, RESOLUTION.Y);
         _graphics.PreferredBackBufferWidth = RESOLUTION.X;
         _graphics.PreferredBackBufferHeight = RESOLUTION.Y;
